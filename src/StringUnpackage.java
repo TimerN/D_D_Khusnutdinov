@@ -8,7 +8,6 @@ public class StringUnpackage {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String s = reader.readLine();
         System.out.println(s);
-
-        //напишите тут ваш код
+        System.out.println(s + s);
     }
 }
