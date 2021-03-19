@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Locale;
 
 
 public class StringUnpacker {
@@ -8,8 +7,38 @@ public class StringUnpacker {
     public static void main(String[] args) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String s = reader.readLine();
-        Unpacker unpacker = new Unpacker(s);
-        System.out.println(unpacker.strUnpacked());
+        int k = 0;
+        int leftBracketCounter = 0;
+        int rightBrackerCounter = 0;
+        while (k < s.length()) {
+            if (s.charAt(k) > 47 && s.charAt(k) < 58 || s.charAt(k) > 96 && s.charAt(k) < 123 || s.charAt(k) == '[' || s.charAt(k) == ']') {
+                if (s.charAt(k)=='[') {
+                    leftBracketCounter++;
+                }
+                else if (s.charAt(k)==']') {
+                    rightBrackerCounter++;
+                    if (leftBracketCounter < rightBrackerCounter) {
+                        System.out.println("String is not valid!2");
+                        break;
+                    }
+                }
+                if (k == s.length() - 1) {
+                    if (leftBracketCounter == rightBrackerCounter) {
+                        Unpacker unpacker = new Unpacker(s);
+                        System.out.println(unpacker.strUnpacked());
+                        System.out.println("Boom");
+                    }
+                    else {
+                        System.out.println("String is not valid!3");
+                    }
+                }
+                k++;
+            }
+            else {
+                System.out.println("String is not valid!4");
+                break;
+            }
+        }
     }
     public static class Unpacker {
         public String str;
@@ -56,7 +85,7 @@ public class StringUnpacker {
                     i++;
                 }
                 else {
-                    unpackedStr = "String is not valid!";
+                    unpackedStr = "String is not valid!1";
                     break;
                 }
             }
