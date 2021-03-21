@@ -8,9 +8,9 @@ public class StringUnpacker {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String s = reader.readLine();
         /* цикл для проверки строки на валидность */
-        int leftBracketCounter = 0;
-        int rightBracketCounter = 0;
-        int flagOfBracketEnclosure = 1;
+        int leftBracketCounter = 0;               // счетчик левых скобок
+        int rightBracketCounter = 0;              // счетчик правых скобок
+        int flagOfBracketEnclosure = 1;           // флаг того, есть вложенные скобки или нет
         for (int k = 0; k < s.length(); k++) {
             if (Character.isDigit(s.charAt(k)) || s.charAt(k) > 96 && s.charAt(k) < 123 || s.charAt(k) == '[' || s.charAt(k) == ']') {
                 if (Character.isDigit(s.charAt(k))) {
@@ -40,32 +40,32 @@ public class StringUnpacker {
                         break;
                     }
                 }
-                /*строка валидна*/
                 if (k == s.length() - 1) {
+            /*ниже обработка валидной строки*/
                     if (leftBracketCounter == rightBracketCounter) {
-
                         if (leftBracketCounter == 0) {
-                            System.out.println(s);
+                            System.out.println(s);                       //строка без скобок
                         }
                         else if (flagOfBracketEnclosure == 1) {
                             Unpacker unpacker = new Unpacker(s);
-                            System.out.println(unpacker.strUnpacked());
+                            System.out.println(unpacker.strUnpacked());  //строка без вложенных скобок,т.к. флаг не поднялся
                         }
                         else {
-                            StringBuffer sb = new StringBuffer(s);
+                            /*цикл распаковывает (с помощью базового метода) каждую подстроку без вложенных скобок и перезаписывает в начальную строку*/
+                            StringBuffer sb = new StringBuffer(s);                                      //используем StringBuffer, чтобы можно было применить replace
                             for (int m = 0; m < leftBracketCounter; m++) {
-                                int firstRigBr = sb.indexOf("]");
-                                int leftBrEncl = sb.substring(0, firstRigBr + 1).lastIndexOf("[");
-                                int leftbr = sb.substring(0,leftBrEncl).lastIndexOf("[");
-                                String s2 = sb.substring(leftbr + 1, firstRigBr + 1);
-                                Unpacker unpacker = new Unpacker(s2);
-                                s2 = unpacker.strUnpacked();
-                                sb.replace(leftbr + 1, firstRigBr + 1, s2);
+                                int firstRigBr = sb.indexOf("]");                                       //индекс первой правой скобки
+                                int leftBrEncl = sb.substring(0, firstRigBr + 1).lastIndexOf("[");  //индекс первой левой от первой правой скобки
+                                int leftbr = sb.substring(0,leftBrEncl).lastIndexOf("[");           //индекс второй левой от правой скобки
+                                String subs = sb.substring(leftbr + 1, firstRigBr + 1);                 //подстрока без вложенных скобок
+                                Unpacker unpacker = new Unpacker(subs);
+                                subs = unpacker.strUnpacked();                                          //распаковка
+                                sb.replace(leftbr + 1, firstRigBr + 1, subs);                  //замена подстроки на распакованную
                             }
-                            System.out.println(sb);
+                            System.out.println(sb);                       //строка с вложенными скобками
                         }
-
                     }
+            /*выше обработка валидной строки*/
                     else {
                         System.out.println("String is not valid!5"); //открывающих скобок больше
                     }
@@ -84,12 +84,12 @@ public class StringUnpacker {
             str = s;
         }
 
-        /* метод для распаковки строки без скобок*/
+        /* метод для распаковки базовой строки без вложенных скобок*/
         public String strUnpacked() {
-            String numbers = "";
-            String symbols = "";
-            String unpackedStr = "";
-            int num = 1;
+            String numbers = "";            //строка для записи числа перед скобкой
+            String symbols = "";            //строка для записи латиницы
+            String unpackedStr = "";        //строка для записи распакованной строки
+            int num = 1;                    //переменная для записи числа перед скобкой
             for (int i = 0; i < str.length(); i++) {
                 if (Character.isDigit(str.charAt(i)) && str.charAt(i + 1) == '[') {
                     numbers = numbers + str.charAt(i);
@@ -130,10 +130,6 @@ public class StringUnpacker {
                 }
                 else if (str.charAt(i) > 96 && str.charAt(i) < 123) {
                     symbols = symbols + str.charAt(i);
-                }
-                else {
-                    unpackedStr = "Boom";
-                    break;
                 }
             }
             return unpackedStr;
