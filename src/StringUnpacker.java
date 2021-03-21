@@ -28,6 +28,10 @@ public class StringUnpacker {
                         System.out.println("String is not valid!3"); // перед скобкой не число
                         break;
                     }
+                    else if (!(s.charAt(k) > 96 && s.charAt(k) < 123)) {
+                        System.out.println("String is not valid!4"); // после скобки не буква
+                        break;
+                    }
                     leftBracketCounter++;
                     if (leftBracketCounter - rightBracketCounter > flagOfBracketEnclosure) {
                         flagOfBracketEnclosure = leftBracketCounter - rightBracketCounter;
@@ -36,7 +40,7 @@ public class StringUnpacker {
                 else if (s.charAt(k) == ']') {
                     rightBracketCounter++;
                     if (leftBracketCounter < rightBracketCounter) {
-                        System.out.println("String is not valid!4"); //есть уже закрывающая скобка хотя не было открывающей
+                        System.out.println("String is not valid!5"); //есть уже закрывающая скобка хотя не было открывающей
                         break;
                     }
                 }
@@ -67,12 +71,12 @@ public class StringUnpacker {
                     }
             /*выше обработка валидной строки*/
                     else {
-                        System.out.println("String is not valid!5"); //открывающих скобок больше
+                        System.out.println("String is not valid!6"); //открывающих скобок больше
                     }
                 }
             }
             else {
-                System.out.println("String is not valid!6"); //в строке есть другие символы кроме цифр, букв и скобок
+                System.out.println("String is not valid!7"); //в строке есть другие символы кроме цифр, букв и скобок
                 break;
             }
         }
