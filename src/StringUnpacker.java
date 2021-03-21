@@ -28,7 +28,7 @@ public class StringUnpacker {
                         System.out.println("String is not valid!3"); // перед скобкой не число
                         break;
                     }
-                    else if (!(s.charAt(k) > 96 && s.charAt(k) < 123)) {
+                    else if (!((s.charAt(k + 1) > 96 && s.charAt(k + 1) < 123) || Character.isDigit(s.charAt(k + 1)))) {
                         System.out.println("String is not valid!4"); // после скобки не буква
                         break;
                     }
