@@ -10,6 +10,7 @@ public class StringUnpacker {
         /* цикл для проверки строки на валидность */
         int leftBracketCounter = 0;
         int rightBracketCounter = 0;
+        int flagOfBracketEnclosure = 1;
         for (int k = 0; k < s.length(); k++) {
             if (Character.isDigit(s.charAt(k)) || s.charAt(k) > 96 && s.charAt(k) < 123 || s.charAt(k) == '[' || s.charAt(k) == ']') {
                 if (Character.isDigit(s.charAt(k))) {
@@ -28,6 +29,9 @@ public class StringUnpacker {
                         break;
                     }
                     leftBracketCounter++;
+                    if (leftBracketCounter - rightBracketCounter > flagOfBracketEnclosure) {
+                        flagOfBracketEnclosure = leftBracketCounter - rightBracketCounter;
+                    }
                 }
                 else if (s.charAt(k) == ']') {
                     rightBracketCounter++;
@@ -36,15 +40,29 @@ public class StringUnpacker {
                         break;
                     }
                 }
+                /*строка валидна*/
                 if (k == s.length() - 1) {
                     if (leftBracketCounter == rightBracketCounter) {
-                        /*строка валидна*/
+
                         if (leftBracketCounter == 0) {
                             System.out.println(s);
                         }
-                        else {
+                        else if (flagOfBracketEnclosure == 1) {
                             Unpacker unpacker = new Unpacker(s);
                             System.out.println(unpacker.strUnpacked());
+                        }
+                        else {
+                            StringBuffer sb = new StringBuffer(s);
+                            for (int m = 0; m < leftBracketCounter; m++) {
+                                int firstRigBr = sb.indexOf("]");
+                                int leftBrEncl = sb.substring(0, firstRigBr + 1).lastIndexOf("[");
+                                int leftbr = sb.substring(0,leftBrEncl).lastIndexOf("[");
+                                String s2 = sb.substring(leftbr + 1, firstRigBr + 1);
+                                Unpacker unpacker = new Unpacker(s2);
+                                s2 = unpacker.strUnpacked();
+                                sb.replace(leftbr + 1, firstRigBr + 1, s2);
+                            }
+                            System.out.println(sb);
                         }
 
                     }
@@ -82,6 +100,15 @@ public class StringUnpacker {
                 }
                 else if (str.charAt(i) == '[' || str.charAt(i) == ']') {
                     continue;
+                }
+                else if (str.charAt(i) > 96 && str.charAt(i) < 123 &&  Character.isDigit(str.charAt(i + 1))) {
+                    symbols = symbols + str.charAt(i);
+                    for (int j = 0; j < num; j++) {
+                        unpackedStr = unpackedStr + symbols;
+                    }
+                    num = 1;
+                    numbers = "";
+                    symbols = "";
                 }
                 else if (str.charAt(i) > 96 && str.charAt(i) < 123 &&  i == str.length() - 1) {
                     symbols = symbols + str.charAt(i);
